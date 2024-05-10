@@ -1,4 +1,4 @@
-package org.example;
+package org.example.parsers;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -7,19 +7,21 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public class CommitChange {
+public class MergeRequest {
 
     public List<FileChange> commitChanges = new ArrayList<>();
 
-    public CommitChange(String gitDiff) {
+    public String author = "";
+
+    public MergeRequest(String gitDiff) {
         // There goes "git diff" parser, splitting "gitDiff" into separate file info
     }
 
-    public CommitChange(List<String> gitDiff) {
+    public MergeRequest(List<String> gitDiff) {
         // There goes "git diff" parser, splitting "gitDiff" into separate file info
     }
 
-    public CommitChange(Path gitDiff) {
+    public MergeRequest(Path gitDiff) {
         // There goes "git diff" parser, splitting "gitDiff" into separate file info
         try {
             Scanner scanner = new Scanner(gitDiff);
