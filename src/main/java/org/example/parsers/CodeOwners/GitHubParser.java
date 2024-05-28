@@ -7,6 +7,6 @@ public class GitHubParser implements CodeOwnersParser {
 
     @Override
     public Pair<String, Member> parseCodeOwners() {
-        return null
+        return null;
     }
 }
