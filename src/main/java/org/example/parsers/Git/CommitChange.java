@@ -1,4 +1,4 @@
-package org.example.parsers;
+package org.example.parsers.Git;
 
 import java.io.IOException;
 import java.nio.file.Path;

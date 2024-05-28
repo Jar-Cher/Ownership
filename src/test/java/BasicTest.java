@@ -1,5 +1,5 @@
-import org.example.parsers.ChangeType;
-import org.example.parsers.CommitChange;
+import org.example.parsers.Git.ChangeType;
+import org.example.parsers.Git.CommitChange;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import java.nio.file.Paths;

@@ -1,4 +1,4 @@
-package org.example.parsers;
+package org.example.parsers.Git;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

@@ -1,4 +1,4 @@
-package org.example.parsers;
+package org.example.parsers.Git;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package org.example.parsers;
+package org.example.parsers.Git;
 
 public enum ChangeType {
     CHANGE,
