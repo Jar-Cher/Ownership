@@ -6,9 +6,9 @@ import java.util.Set;
 public class User implements Member {
 
     // Must be unique
-    private String username;
+    private final String username;
     private String email;
-    private static Set<String> users = new HashSet<>();
+    private final static Set<String> users = new HashSet<>();
 
     public User(String username) {
         this.username = username;
@@ -17,6 +17,6 @@ public class User implements Member {
 
     @Override
     public void requestReview() {
-        System.out.println(username + " is asked for review");
+        System.out.println(username + " asked for review");
     }
 }

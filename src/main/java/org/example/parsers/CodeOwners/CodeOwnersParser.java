@@ -3,7 +3,9 @@ package org.example.parsers.CodeOwners;
 import org.example.models.Member;
 import javafx.util.Pair;
 
+import java.io.FileNotFoundException;
+
 public interface CodeOwnersParser {
 
-    public Pair<String, Member> parseCodeOwners();
+    Pair<String, Member> parseCodeOwners(String pathToChangedFile) throws FileNotFoundException;
 }
