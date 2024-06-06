@@ -30,13 +30,13 @@ public class OwnerShip {
         repositoryRoot = root;
     }
 
-    public List<String> checkForFilesWithoutOwners(boolean teamsOnly) {
+    public List<String> checkForFilesWithoutOwners(boolean teamsOnly, boolean rootOnly) {
         List <String> filesWithoutOwners = new ArrayList<>(Collections.emptyList());
         try {
             Files.walkFileTree(Path.of(repositoryRoot), new SimpleFileVisitor<Path>() {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
-                    Member member = defineOwner(String.valueOf(file));
+                    Member member = defineOwner(String.valueOf(file), rootOnly);
                     if (member == null || (teamsOnly && (member.getClass() == User.class))) {
                         filesWithoutOwners.add(String.valueOf(file));
                     }
@@ -50,17 +50,31 @@ public class OwnerShip {
         return filesWithoutOwners;
     }
 
-    public void requestReview(List<String> changedFiles) {
+    public List<String> checkForFilesWithoutOwners(boolean teamsOnly) {
+        return checkForFilesWithoutOwners(teamsOnly, false);
+    }
+
+    public void requestReview(List<String> changedFiles, boolean rootOnly) {
         for (String changedFile : changedFiles) {
-            defineOwner(changedFile).requestReview();
+            defineOwner(changedFile, rootOnly).requestReview();
         }
     }
 
-    public void requestReview(String changedFile) {
-        requestReview(Collections.singletonList(changedFile));
+    public void requestReview(List<String> changedFiles) {
+        for (String changedFile : changedFiles) {
+            defineOwner(changedFile, false).requestReview();
+        }
     }
 
-    private Member defineOwner(String pathToChangedFile) {
+    public void requestReview(String changedFile, boolean rootOnly) {
+        requestReview(Collections.singletonList(changedFile), rootOnly);
+    }
+
+    public void requestReview(String changedFile) {
+        requestReview(Collections.singletonList(changedFile), false);
+    }
+
+    private Member defineOwner(String pathToChangedFile, boolean rootOnly) {
         if (!pathToChangedFile.startsWith(repositoryRoot)) {
             throw new IllegalArgumentException("File is not a part of repository");
         }
@@ -75,7 +89,7 @@ public class OwnerShip {
         if (!Objects.equals(relativePath.get(0), "")) {
             relativePath.add(0, "");
         }
-        Pair<String, Member> result= new Pair<>(null, null);
+        Pair<String, Member> result = new Pair<>(null, null);
         // Look for CODEOWNERS files from root to the directory of a changed file
         for (String s : relativePath) {
             currentPath = currentPath + s;
@@ -100,6 +114,9 @@ public class OwnerShip {
                 }
             }
             currentPath = currentPath + File.separator;
+            if (rootOnly) {
+                break;
+            }
         }
         return result.getValue();
     }
