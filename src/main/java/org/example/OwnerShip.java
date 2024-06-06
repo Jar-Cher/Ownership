@@ -2,19 +2,23 @@ package org.example;
 
 import javafx.util.Pair;
 import org.example.models.Member;
+import org.example.models.Team;
+import org.example.models.User;
+import org.example.parsers.CodeOwners.BitBucketParser;
 import org.example.parsers.CodeOwners.CodeOwnersParser;
 import org.example.parsers.CodeOwners.GitHubParser;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.IOException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.regex.Pattern;
 
 public class OwnerShip {
 
-    private String repositoryRoot;
+    private final String repositoryRoot;
     private CodeOwnersDialect dialect = CodeOwnersDialect.GITHUB;
 
     public OwnerShip(String root, CodeOwnersDialect dialect) {
@@ -26,9 +30,24 @@ public class OwnerShip {
         repositoryRoot = root;
     }
 
-    public List<String> checkForOwners(boolean teamsOnly) {
-        //TODO
-        return Collections.emptyList();
+    public List<String> checkForFilesWithoutOwners(boolean teamsOnly) {
+        List <String> filesWithoutOwners = new ArrayList<>(Collections.emptyList());
+        try {
+            Files.walkFileTree(Path.of(repositoryRoot), new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                    Member member = defineOwner(String.valueOf(file));
+                    if (member == null || (teamsOnly && (member.getClass() == User.class))) {
+                        filesWithoutOwners.add(String.valueOf(file));
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+            }
+        );
+        } catch (IOException ignored) {
+
+        }
+        return filesWithoutOwners;
     }
 
     public void requestReview(List<String> changedFiles) {
@@ -66,6 +85,9 @@ public class OwnerShip {
                 switch (dialect) {
                     case GITHUB:
                         parser = new GitHubParser(currentPathToCodeOwners);
+                        break;
+                    case BITBUCKET:
+                        parser = new BitBucketParser(currentPathToCodeOwners);
                         break;
                     default:
                         parser = new GitHubParser(currentPathToCodeOwners);
