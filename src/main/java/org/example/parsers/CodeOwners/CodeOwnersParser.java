@@ -8,4 +8,5 @@ import java.io.FileNotFoundException;
 public interface CodeOwnersParser {
 
     Pair<String, Member> parseCodeOwners(String pathToChangedFile) throws FileNotFoundException;
+
 }

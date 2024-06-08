@@ -1,6 +1,8 @@
 package org.example;
 
 import javafx.util.Pair;
+import org.example.exceptions.DialectNotSupported;
+import org.example.exceptions.OwnerNotFoundException;
 import org.example.models.Member;
 import org.example.models.Team;
 import org.example.models.User;
@@ -20,10 +22,12 @@ public class OwnerShip {
 
     private final String repositoryRoot;
     private CodeOwnersDialect dialect = CodeOwnersDialect.GITHUB;
+    private boolean noOwnerException = false;
 
-    public OwnerShip(String root, CodeOwnersDialect dialect) {
+    public OwnerShip(String root, CodeOwnersDialect dialect, boolean noOwnerException) {
         repositoryRoot = root;
         this.dialect = dialect;
+        this.noOwnerException = false;
     }
 
     public OwnerShip(String root) {
@@ -96,17 +100,11 @@ public class OwnerShip {
             System.out.println(currentPath);
             String currentPathToCodeOwners = currentPath + File.separator + "CODEOWNERS";
             if (Files.exists(Path.of(currentPathToCodeOwners))) {
-                switch (dialect) {
-                    case GITHUB:
-                        parser = new GitHubParser(currentPathToCodeOwners);
-                        break;
-                    case BITBUCKET:
-                        parser = new BitBucketParser(currentPathToCodeOwners);
-                        break;
-                    default:
-                        parser = new GitHubParser(currentPathToCodeOwners);
-                        break;
-                }
+                parser = switch (dialect) {
+                    case GITHUB -> new GitHubParser(currentPathToCodeOwners);
+                    case BITBUCKET -> new BitBucketParser(currentPathToCodeOwners);
+                    default -> throw new DialectNotSupported(dialect.name());
+                };
                 try {
                     result = parser.parseCodeOwners(pathToChangedFile);
                 } catch (FileNotFoundException ignored) {
@@ -117,6 +115,9 @@ public class OwnerShip {
             if (rootOnly) {
                 break;
             }
+        }
+        if ((noOwnerException) && (result.getValue() == null)) {
+            throw new OwnerNotFoundException(pathToChangedFile);
         }
         return result.getValue();
     }

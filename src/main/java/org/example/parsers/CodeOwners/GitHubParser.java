@@ -98,6 +98,7 @@ public class GitHubParser implements CodeOwnersParser {
                 }
                 if (lineSeparated.length < 2) {
                     System.out.println("WARNING: no owner specified");
+                    reviewer = null;
                 }
                 // Check owners
                 String[] members = lineSeparated[1].split("\\s+");
