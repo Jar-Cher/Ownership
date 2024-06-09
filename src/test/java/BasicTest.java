@@ -27,7 +27,7 @@ public class BasicTest {
         String randomExample = "src\\test\\resources\\CodeOwnersExamples\\GitHubExample";
         Assertions.assertNull(ownership.defineOwner(randomExample, true));
         Assertions.assertEquals(ownership.defineOwner(randomExample, false).toString(),
-                "[@global-owner2, @global-owner1]");
+                "[@global-owner1, @global-owner2]");
 
         String JSExample = "src\\test\\resources\\CodeOwnersExamples\\SomeFolder\\interface.js";
         Assertions.assertEquals(ownership.defineOwner(JSExample, false).toString(),

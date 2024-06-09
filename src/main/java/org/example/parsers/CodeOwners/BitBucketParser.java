@@ -38,7 +38,7 @@ public class BitBucketParser implements CodeOwnersParser {
                 }
                 String[] lineSeparated = line.split("\\s+", 2);
                 // /address
-                if (lineSeparated[0].matches("^(/[a-zA-Z0-9_\\.\\-\\+=]+)+(/(\\*\\.[a-zA-Z0-9]+)?)?$")) {
+                if (lineSeparated[0].matches("^(/[\\w\\.\\-\\+=]+)+(/(\\*\\.[a-zA-Z0-9]+)?)?$")) {
                     String replacement = "[a-zA-Z0-9_\\\\\\\\.\\\\\\\\-\\\\\\\\+=]+";
                     String mask = lineSeparated[0].replaceAll("\\*", replacement);
                     if (!pathToChangedFile.matches(mask)) {
@@ -47,7 +47,7 @@ public class BitBucketParser implements CodeOwnersParser {
                     addressMask = lineSeparated[0];
                 }
                 // **/address/
-                else if (lineSeparated[0].matches("^\\*\\*(/[a-zA-Z0-9_\\.\\-\\+=]+)+(/(\\*\\.[a-zA-Z0-9]+)?)?$")) {
+                else if (lineSeparated[0].matches("^\\*\\*(/[\\w\\.\\-\\+=]+)+(/(\\*\\.[a-zA-Z0-9]+)?)?$")) {
                     String replacementAddress = "([a-zA-Z0-9_\\\\\\\\.\\\\\\\\-\\\\\\\\+=]+)?(\\\\\\\\[a-zA-Z0-9_\\\\\\\\.\\\\\\\\-\\\\\\\\+=]+)+";
                     String replacementExtension = "[a-zA-Z0-9_\\\\\\\\.\\\\\\\\-\\\\\\\\+=]+";
                     String mask = lineSeparated[0]
@@ -59,7 +59,7 @@ public class BitBucketParser implements CodeOwnersParser {
                     addressMask = lineSeparated[0];
                 }
                 // address/
-                else if (lineSeparated[0].matches("^([a-zA-Z0-9_\\.\\-\\+=]+)+(/(\\*\\.[a-zA-Z0-9]+)?)?$")) {
+                else if (lineSeparated[0].matches("^([\\w\\.\\-\\+=]+)+(/(\\*\\.[a-zA-Z0-9]+)?)?$")) {
                     String replacement = "[a-zA-Z0-9_\\\\\\\\.\\\\\\\\-\\\\\\\\+=]+";
                     String mask = lineSeparated[0].replaceAll("\\*", replacement);
                     if (!pathToChangedFile.matches(mask)) {
@@ -77,7 +77,7 @@ public class BitBucketParser implements CodeOwnersParser {
                     addressMask = lineSeparated[0];
                 }
                 // **/address
-                else if (lineSeparated[0].matches("^\\*\\*(/[a-zA-Z0-9_\\.\\-\\+=]+)+(\\.[a-zA-Z0-9]+)?$")) {
+                else if (lineSeparated[0].matches("^\\*\\*(/[\\w\\.\\-\\+=]+)+(\\.[a-zA-Z0-9]+)?$")) {
                     String replacement = "([a-zA-Z0-9_\\\\\\\\.\\\\\\\\-\\\\\\\\+=]+)?(\\\\\\\\[a-zA-Z0-9_\\\\\\\\.\\\\\\\\-\\\\\\\\+=]+)+";
                     String mask = lineSeparated[0].replaceAll("\\*\\*", replacement);
                     if (!pathToChangedFile.matches(mask)) {
@@ -86,7 +86,7 @@ public class BitBucketParser implements CodeOwnersParser {
                     addressMask = lineSeparated[0];
                 }
                 // address/*
-                else if (lineSeparated[0].matches("^([a-zA-Z0-9_\\.\\-\\+=]+)+/\\*(\\.[a-zA-Z0-9]+)?$")) {
+                else if (lineSeparated[0].matches("^([\\w\\.\\-\\+=]+)+/\\*(\\.[a-zA-Z0-9]+)?$")) {
                     String replacement = "[a-zA-Z0-9_\\\\\\\\.\\\\\\\\-\\\\\\\\+=]+";
                     String mask = lineSeparated[0].replaceAll("\\*", replacement);
                     if (!pathToChangedFile.matches(mask)) {
@@ -109,7 +109,7 @@ public class BitBucketParser implements CodeOwnersParser {
                     Team team = new Team("");
                     for (String member : members) {
                         // Individual member is either username or email
-                        if (member.matches("^@([a-zA-Z0-9_\\-\\+=]+)+$") ||
+                        if (member.matches("^@([\\w\\-\\+=]+)+$") ||
                                 member.matches("^[^@]+@[^@]+\\.[^@]+$")) {
                             team.addMemeber(new User(member));
                         }
@@ -117,7 +117,7 @@ public class BitBucketParser implements CodeOwnersParser {
                     reviewer = team;
                 }
                 // User
-                else if (lineSeparated[1].matches("^@([a-zA-Z0-9_\\-\\+=]+)+$")) {
+                else if (lineSeparated[1].matches("^@([\\w\\-\\+=]+)+$")) {
                     reviewer = new User(lineSeparated[1]);
                 }
                 // Email
