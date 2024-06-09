@@ -4,7 +4,10 @@ import javafx.util.Pair;
 import org.example.models.Member;
 import org.example.models.Team;
 import org.example.models.User;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class GitHubParser implements CodeOwnersParser {
 
@@ -29,7 +32,6 @@ public class GitHubParser implements CodeOwnersParser {
                 }
                 // Delete and ignore comments
                 line = line.replaceAll("#.*$","").strip();
-                System.out.println(line);
                 if (line.equals("")) {
                     continue;
                 }

@@ -5,10 +5,11 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        OwnerShip ownership = new OwnerShip("src\\test\\resources");
-        List<String> test = Arrays.asList(
-                "src\\test\\resources\\CodeOwnersExamples\\GitHubExample"
-        );
-        ownership.requestReview(test);
+        System.out.println("Hello");
+        try {
+            Thread.sleep(5L);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

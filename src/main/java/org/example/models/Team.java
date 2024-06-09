@@ -19,6 +19,11 @@ public class Team implements Member {
         }
     }
 
+    @Override
+    public String toString() {
+        return members.toString();
+    }
+
     public void addMemeber(User user) {
         members.add(user);
     }

@@ -19,4 +19,10 @@ public class User implements Member {
     public void requestReview() {
         System.out.println(username + " asked for review");
     }
+
+
+    @Override
+    public String toString() {
+        return username;
+    }
 }

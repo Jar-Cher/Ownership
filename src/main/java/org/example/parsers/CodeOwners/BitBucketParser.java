@@ -4,8 +4,6 @@ import javafx.util.Pair;
 import org.example.models.Member;
 import org.example.models.Team;
 import org.example.models.User;
-import org.example.parsers.CodeOwners.CodeOwnersParser;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;

@@ -4,12 +4,10 @@ import javafx.util.Pair;
 import org.example.exceptions.DialectNotSupported;
 import org.example.exceptions.OwnerNotFoundException;
 import org.example.models.Member;
-import org.example.models.Team;
 import org.example.models.User;
 import org.example.parsers.CodeOwners.BitBucketParser;
 import org.example.parsers.CodeOwners.CodeOwnersParser;
 import org.example.parsers.CodeOwners.GitHubParser;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -78,16 +76,15 @@ public class OwnerShip {
         requestReview(Collections.singletonList(changedFile), false);
     }
 
-    private Member defineOwner(String pathToChangedFile, boolean rootOnly) {
+    public Member defineOwner(String pathToChangedFile, boolean rootOnly) {
         if (!pathToChangedFile.startsWith(repositoryRoot)) {
             throw new IllegalArgumentException("File is not a part of repository");
         }
         CodeOwnersParser parser;
-        List<String> relativePath = new ArrayList<>(
-                Arrays.stream(pathToChangedFile
+        List<String> relativePath = Arrays.stream(pathToChangedFile
                                 .replace(repositoryRoot, "")
                                 .split(Pattern.quote(File.separator)))
-                        .toList());
+                .toList();
         String currentPath = repositoryRoot;
         // Ensure the root of repository is checked no matter the format
         if (!Objects.equals(relativePath.get(0), "")) {
@@ -97,7 +94,6 @@ public class OwnerShip {
         // Look for CODEOWNERS files from root to the directory of a changed file
         for (String s : relativePath) {
             currentPath = currentPath + s;
-            System.out.println(currentPath);
             String currentPathToCodeOwners = currentPath + File.separator + "CODEOWNERS";
             if (Files.exists(Path.of(currentPathToCodeOwners))) {
                 parser = switch (dialect) {
